@@ -1,0 +1,24 @@
+
+**/*.iml
+**/*.project
+**/*.classpath
+stat_analy_*
+### second log ###
+**/error/**
+**/info/**
+**/logs/**
+**/build/**
+**/idea/**
+### IDE  folder and item's file###
+**/.idea/**
+.idea/**
+.settings/*
+*/.settings/*
+**/bin/*
+### make file ###
+*/target/*
+**/target/*
+### other
+**/build/**
+*.log
+*/*.iml

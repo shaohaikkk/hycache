@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.zero</groupId>
+    <artifactId>hycache</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>hycache-core</module>
+        <module>hycache-dependencies</module>
+        <module>hycache-starter</module>
+        <module>hycahe-testes</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <javassist.version>3.28.0-GA</javassist.version>
+        <caffeine.version>2.9.0</caffeine.version>
+        <reflections.version>0.9.11</reflections.version>
+        <springboot.version>2.5.2</springboot.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>alimaven</id>
+            <name>Maven Aliyun Mirror</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <!-- put your configurations here -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.zero:hycache-core</include>
+                                    <include>com.zero:hycache-dependencies</include>
+                                    <include>hycache-starter</include>
+                                </includes>
+                                <!--excludes>
+                                  <exclude>groupId:artifactId</exclude>
+                                </excludes-->
+                            </artifactSet>
+                            <!--<filters>-->
+                                <!--<filter>-->
+                                    <!--<artifact>com.unisound.dcs:*</artifact>-->
+                                    <!--<excludes>-->
+                                        <!--<exclude>**/*.xml</exclude>-->
+                                        <!--<exclude>**/*.properties</exclude>-->
+                                    <!--</excludes>-->
+                                <!--</filter>-->
+                            <!--</filters>-->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+                <!--<version>2.3.1</version>-->
+                <!--<configuration>-->
+                    <!--<archive>-->
+                        <!--<manifest>-->
+                            <!--<addClasspath>true</addClasspath>-->
+                        <!--</manifest>-->
+                        <!--<manifestEntries>-->
+                            <!--<Agent-Class>-->
+                                <!--com.zero.hycache.agent.AgentMainTraceAgent-->
+                            <!--</Agent-Class>-->
+                            <!--<Can-Redefine-Classes>true</Can-Redefine-Classes>-->
+                            <!--<Can-Retransform-Classes>true</Can-Retransform-Classes>-->
+                        <!--</manifestEntries>-->
+                    <!--</archive>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+
+</project>
