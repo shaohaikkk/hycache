@@ -17,7 +17,7 @@ public class CacheKeyStrategy {
      * else used full path method
      * @param methodName
      * @param key
-     * @return
+     * @return methodName
      */
     public static String getKey(String methodName, String key) {
         if (StringUtils.isNotBlank(key)) {

@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hycache</artifactId>
-        <groupId>com.zero</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>hycache-parent</artifactId>
+        <groupId>io.github.shaohaikkk</groupId>
+        <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -30,7 +30,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.zero</groupId>
+                <groupId>io.github.shaohaikkk</groupId>
                 <artifactId>hycache-dependencies</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
