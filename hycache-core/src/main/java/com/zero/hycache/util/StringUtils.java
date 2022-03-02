@@ -1,5 +1,8 @@
 package com.zero.hycache.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author zero
  * @date Create on 2020/12/12
@@ -44,4 +47,27 @@ public class StringUtils {
         return !isBlank(cs);
     }
 
+    public static List<String> splitByCharAt(String str, char regx) {
+        //字符串截取的开始位置
+        int begin = 0;
+        //截取分割得到的字符串
+        String splitStr = "";
+        ArrayList<String> result = new ArrayList<String>();
+        int length = str.length();
+        //计数器
+        int i = 0;
+        for (i = 0; i < length;i++ ) {
+            if (str.charAt(i) == regx) {
+                splitStr = str.substring(begin, i);
+                result.add(splitStr);
+                str = str.substring(i + 1, length);
+                length = str.length();
+                i = 0;
+            }
+        }
+        if (!StringUtils.isBlank(str)) {
+            result.add(str);
+        }
+        return result;
+    }
 }

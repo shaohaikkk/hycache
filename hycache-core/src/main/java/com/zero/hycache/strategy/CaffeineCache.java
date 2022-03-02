@@ -1,8 +1,9 @@
 package com.zero.hycache.strategy;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.zero.hycache.annotation.HyCache;
 import com.zero.hycache.manager.CacheClientManager;
-import com.zero.hycache.manager.CacheKeyStrategy;
+import com.zero.hycache.manager.CacheManager;
 
 /**
  * @author zero
@@ -13,19 +14,20 @@ public class CaffeineCache implements AspectCache {
 
 
     @Override
-    public Object beforeMethod(String methodName, String key, int expire, String cacheType) {
-        Cache<String, Object> cacheClient = CacheClientManager.getInstance().getClient(expire);
-        String cacheKey = CacheKeyStrategy.getKey(methodName, key);
-        //TODO refresh code
-        return cacheClient.getIfPresent(cacheKey);
+    public Object beforeMethod(String key, String methodName) {
+        HyCache hycache = CacheManager.getInstance().getAnnotationByMethod(methodName);
+        int expire = hycache.expire() > 0 ? hycache.expire() : -2;
+        Cache<String, Object> cacheClient = CacheClientManager.getInstance().getExpireClient(expire);
+        return cacheClient.getIfPresent(key);
     }
 
     @Override
-    public void afterMethod(String methodName, String key, int expire, String cacheType, Object result) {
+    public void afterMethod(String key, String methodName, Object result) {
+        HyCache hycache = CacheManager.getInstance().getAnnotationByMethod(methodName);
+        int expire = hycache.expire() > 0 ? hycache.expire() : -2;
         // get client key
-        Cache<String, Object> cacheClient = CacheClientManager.getInstance().getClient(expire);
+        Cache<String, Object> cacheClient = CacheClientManager.getInstance().getExpireClient(expire);
         // get key
-        String cacheKey = CacheKeyStrategy.getKey(methodName, key);
-        cacheClient.put(cacheKey, result);
+        cacheClient.put(key, result);
     }
 }

@@ -3,7 +3,6 @@ package com.zero.hycache.manager;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +24,7 @@ public class CacheClientManager {
      * @param key
      * @return
      */
-    public Cache<String, Object> getClient(long key) {
+    public Cache<String, Object> getExpireClient(long key) {
         // Never Expires
         if (key < 1) {
             key = -2;

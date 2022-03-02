@@ -8,7 +8,7 @@
     <artifactId>hycache-parent</artifactId>
     <name>hycache-parent</name>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <url>https://github.com/shaohaikkk/hycache</url>
     <description>an cache tool</description>
     <modules>

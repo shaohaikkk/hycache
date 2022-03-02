@@ -1,5 +1,6 @@
 package com.zero.hycache.manager;
 
+import com.zero.hycache.annotation.HyCache;
 import com.zero.hycache.strategy.AspectCache;
 import com.zero.hycache.strategy.CaffeineCache;
 import com.zero.hycache.util.CacheType;
@@ -14,8 +15,10 @@ import java.util.Map;
  */
 public class CacheManager {
 
-    private static CacheManager INSTANCE = null;
-    private static Map<CacheType, AspectCache> cacheTypeMap=new HashMap<>();
+    private static volatile CacheManager INSTANCE = null;
+    private static Map<CacheType, AspectCache> cacheTypeMap = new HashMap<>();
+    private static Map<String, HyCache> annotationMap = new HashMap<>();
+
     static {
         cacheTypeMap.put(CacheType.LOCAL, new CaffeineCache());
     }
@@ -39,9 +42,22 @@ public class CacheManager {
         return INSTANCE;
     }
 
-    public AspectCache getCache(String type){
+    public AspectCache getAspectCache(String type) {
         CacheType cacheType = CacheType.valueOf(type);
         return cacheTypeMap.get(cacheType);
+    }
+
+    public HyCache getAnnotationByMethod(String method) {
+        return annotationMap.get(method);
+    }
+
+    public void putAnnotation(String method, HyCache hyCache) {
+        annotationMap.put(method, hyCache);
+    }
+
+    public void clearAnnotationMap() {
+        // help GC
+        annotationMap=new HashMap<>();
     }
 
 }

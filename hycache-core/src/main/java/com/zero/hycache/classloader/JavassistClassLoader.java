@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author zero
@@ -15,6 +17,7 @@ import java.nio.channels.WritableByteChannel;
  */
 public class JavassistClassLoader extends ClassLoader {
 
+    private Set<String> loadedClass=new HashSet<>();
 
     public JavassistClassLoader(ClassLoader parent) {
         super(parent);
@@ -32,12 +35,18 @@ public class JavassistClassLoader extends ClassLoader {
 
     @Override
     public Class<?> findClass(String name) {
+        // Avoid repeated scanning
+        if(loadedClass.contains(name)){
+            return null;
+        }
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String filePath = path + name.replaceAll("\\.", "\\" + File.separator).concat(".class");
         File file = new File(filePath);
         if (!file.exists()) {
             return null;
         }
+        // add to loaded class set
+        loadedClass.add(name);
         try (FileInputStream fis = new FileInputStream(file); ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[1024];
             int b = 0;
