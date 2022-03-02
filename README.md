@@ -43,3 +43,16 @@ public class UserService {
         return new UserBean("tom",18);
     }
 ```
+
+#### demo3
+```
+@RequestMapping(value = "demo2")
+    public UserBean demo2(int userId) {
+        return this.getUser(userId);
+    }
+    @HyCache(key = "user:#userId",expire = 10)
+    public UserBean getUser(int userId){
+        log.info("cache penetration");
+        return new UserBean("tom",18);
+    }
+```
