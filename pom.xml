@@ -15,7 +15,7 @@
         <module>hycache-core</module>
         <module>hycache-dependencies</module>
         <module>hycache-starter</module>
-        <module>hycahe-testes</module>
+        <module>hycache-testes</module>
     </modules>
 
     <properties>
