@@ -1,6 +1,5 @@
 package com.zero.hycache.starter;
 
-import com.zero.hycache.enhance.HyCacheEnhancer;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -13,6 +12,6 @@ public class HyCacheInitializer implements ApplicationContextInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        HyCacheEnhancer.start();
+//        HyCacheEnhancer.start();
     }
 }

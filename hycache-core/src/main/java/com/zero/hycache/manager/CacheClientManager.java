@@ -3,7 +3,6 @@ package com.zero.hycache.manager;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,35 +16,35 @@ import java.util.concurrent.TimeUnit;
 public class CacheClientManager {
 
     private static CacheClientManager INSTANCE = null;
-    private static final Map<Long, Cache<String, Object>> clientMap = new ConcurrentHashMap<>();
+    private static final Map<Integer, Cache<String, Object>> clientMap = new ConcurrentHashMap<>();
 
     /**
      * TODO need think how to solve the concurrent and performance
      *
-     * @param key
+     * @param expire
      * @return
      */
-    public Cache<String, Object> getClient(long key) {
+    public Cache<String, Object> getClient(int expire) {
         // Never Expires
-        if (key < 1) {
-            key = -2;
+        if (expire < 1) {
+            expire = -2;
         }
-        Cache<String, Object> client = clientMap.get(key);
+        Cache<String, Object> client = clientMap.get(expire);
         if (client == null) {
             synchronized (CacheClientManager.class) {
-                client = clientMap.get(key);
+                client = clientMap.get(expire);
                 if (client == null) {
                     // Never Expires
-                    if (key < 1) {
+                    if (expire < 1) {
                         client = Caffeine
                                 .newBuilder()
                                 .build();
                     } else {
                         client = Caffeine
                                 .newBuilder()
-                                .expireAfterWrite(key, TimeUnit.SECONDS).build();
+                                .expireAfterWrite(expire, TimeUnit.SECONDS).build();
                     }
-                    clientMap.put(key, client);
+                    clientMap.put(expire, client);
                 }
             }
         }

@@ -6,7 +6,7 @@ package com.zero.hycache.strategy;
  * @description
  */
 public interface AspectCache {
-    Object beforeMethod(String methodName, String key, int expire, String cacheType);
+    Object beforeMethod(String key, int expire);
 
-    void afterMethod(String methodName, String key, int expire, String cacheType, Object result);
+    void afterMethod(String key, int expire, Object result);
 }

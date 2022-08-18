@@ -2,30 +2,24 @@ package com.zero.hycache.strategy;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.zero.hycache.manager.CacheClientManager;
-import com.zero.hycache.manager.CacheKeyStrategy;
 
 /**
  * @author zero
- * @date Create on 2020/10/21
+ * @date Create on 2022/7/27
  * @description
  */
 public class CaffeineCache implements AspectCache {
 
-
-    @Override
-    public Object beforeMethod(String methodName, String key, int expire, String cacheType) {
+    public Object beforeMethod(String key, int expire) {
         Cache<String, Object> cacheClient = CacheClientManager.getInstance().getClient(expire);
-        String cacheKey = CacheKeyStrategy.getKey(methodName, key);
         //TODO refresh code
-        return cacheClient.getIfPresent(cacheKey);
+        return cacheClient.getIfPresent(key);
     }
 
-    @Override
-    public void afterMethod(String methodName, String key, int expire, String cacheType, Object result) {
+    public void afterMethod(String key, int expire, Object result) {
         // get client key
         Cache<String, Object> cacheClient = CacheClientManager.getInstance().getClient(expire);
         // get key
-        String cacheKey = CacheKeyStrategy.getKey(methodName, key);
-        cacheClient.put(cacheKey, result);
+        cacheClient.put(key, result);
     }
 }

@@ -1,2 +1,0 @@
-org.springframework.context.ApplicationContextInitializer=\
-com.zero.hycache.starter.HyCacheInitializer

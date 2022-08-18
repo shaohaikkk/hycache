@@ -11,20 +11,20 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimeUnitUtil {
 
-    public static long getSeconds(int time, TimeUnit timeUnit) {
-        long unit;
+    public static int getSeconds(int time, TimeUnit timeUnit) {
+        int unit;
         switch (timeUnit) {
             case SECONDS:
-                unit = 1L;
+                unit = 1;
                 break;
             case MINUTES:
-                unit = 60L;
+                unit = 60;
                 break;
             case HOURS:
-                unit = 60 * 60L;
+                unit = 60 * 60;
                 break;
             case DAYS:
-                unit = 60 * 60 * 24L;
+                unit = 60 * 60 * 24;
                 break;
             default:
                 throw new IllegalTimeUnitException();

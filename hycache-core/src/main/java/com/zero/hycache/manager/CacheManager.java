@@ -15,7 +15,8 @@ import java.util.Map;
 public class CacheManager {
 
     private static CacheManager INSTANCE = null;
-    private static Map<CacheType, AspectCache> cacheTypeMap=new HashMap<>();
+    private static Map<CacheType, AspectCache> cacheTypeMap = new HashMap<>();
+
     static {
         cacheTypeMap.put(CacheType.LOCAL, new CaffeineCache());
     }
@@ -39,8 +40,7 @@ public class CacheManager {
         return INSTANCE;
     }
 
-    public AspectCache getCache(String type){
-        CacheType cacheType = CacheType.valueOf(type);
+    public AspectCache getCache(CacheType cacheType) {
         return cacheTypeMap.get(cacheType);
     }
 

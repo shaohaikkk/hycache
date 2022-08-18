@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit;
  * @description
  */
 @Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 @Documented
 public @interface HyCache {
 
-    String key() default "" ;
+    String key() default "";
 
     int expire() default -2;
 

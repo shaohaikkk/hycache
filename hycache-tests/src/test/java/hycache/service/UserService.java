@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Component
 public class UserService {
 
-    @HyCache
+    @HyCache(expire = 5)
     @RequestMapping("/getUser")
     public UserBean getUser() {
         System.out.println("缓存穿透");
