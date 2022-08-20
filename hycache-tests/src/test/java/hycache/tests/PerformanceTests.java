@@ -5,7 +5,6 @@ import com.zero.hycache.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StopWatch;
 
@@ -19,18 +18,17 @@ public class PerformanceTests {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private UserService userService;
-
     @Test
-    public void test(){
+    public void test() {
         UserService userService = new UserService();
-        StopWatch stopWatch=new StopWatch();
+        StopWatch stopWatch = new StopWatch();
+        int nums=10000000;
         stopWatch.start();
-        for(int i=0;i<10000000;i++){
+        for (int i = 0; i < nums; i++) {
             userService.getUser();
         }
         stopWatch.stop();
-        logger.info("结束测试");
+        logger.info("finished {} times performance test at {}ms times",nums,stopWatch.getTotalTimeMillis());
+        System.out.println(stopWatch.prettyPrint());
     }
 }

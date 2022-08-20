@@ -16,11 +16,16 @@ HyCache 主要采用了以下技术和原理
 ## 集成&& 使用
 ### 1. import dependency
 ```
-<dependency>
-  <groupId>io.github.shaohaikkk</groupId>
-  <artifactId>hycache-starter</artifactId>
-  <version>0.0.2</version>
-</dependency>
+<properties>
+  <lasted.version>0.0.3-alpha</lasted.version>
+</properties>
+<dependencies>
+    <dependency>
+      <groupId>io.github.shaohaikkk</groupId>
+      <artifactId>hycache-starter</artifactId>
+      <version>${lasted.version}</version>
+    </dependency>
+</dependencies>
 ```
 
 ### 2. add @HyCache on the method
@@ -71,8 +76,8 @@ public class UserService {
     }
 ```
 ## 问题
-1. 目前仅springboot 的集成
-2. springboot test 单元测试中会存在问题
+1. it's  Implemented by annotations  Annotation processor tools to change class when code build. There will be problems when it is debugged
+2. 通过 Annotation processor tools 实现，代码编译期间修改class 字节码,字节码修改后，在idea 中调试是一个问题
 3. caffeine 的过期实现不够优雅，较为复杂
-4. 只支持String类型，不支持基础类型
+4. 目前仅支持 本地缓存，通过 caffeine 实现本地缓存策略
 
