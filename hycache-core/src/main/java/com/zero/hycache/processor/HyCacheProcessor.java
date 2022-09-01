@@ -21,6 +21,7 @@ import com.zero.hycache.util.UuidUtils;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import java.util.ArrayList;
@@ -50,9 +51,15 @@ public class HyCacheProcessor extends AbstractProcessor {
             //1.包名
             HyCache hyCache = element.getAnnotation(HyCache.class);
             //包装类类型
+            String fullClassName = element.getEnclosingElement().toString();
+            String simpleClassName = fullClassName.split("\\.")[fullClassName.split("\\.").length - 1];
             JCTree.JCMethodDecl jcMethodDecl = (JCTree.JCMethodDecl) trees.getTree(element);
+            boolean IS_STATIC_METHOD = false;
+            if (jcMethodDecl.getModifiers().getFlags().contains(Modifier.STATIC)) {
+                IS_STATIC_METHOD = true;
+            }
             // 生成代理后的真实方法
-            JCTree.JCMethodDecl newJcMethodDecl = generateRealMethod(jcMethodDecl, hyCache);
+            JCTree.JCMethodDecl newJcMethodDecl = generateRealMethod(jcMethodDecl, IS_STATIC_METHOD);
             // 添加方法到class 中
             addMethod(element, newJcMethodDecl);
             String realMethodName = newJcMethodDecl.name.toString();
@@ -61,16 +68,16 @@ public class HyCacheProcessor extends AbstractProcessor {
                 params[i] = treeMaker.Ident(newJcMethodDecl.params.get(i).name);
             }
             // 接收HyCache 内容后续使用
+            boolean finalIS_STATIC_METHOD = IS_STATIC_METHOD;
+            JCTree tree = trees.getTree(element);
             trees.getTree(element).accept(new TreeTranslator() {
 
                 @Override
                 public void visitMethodDef(JCTree.JCMethodDecl jcMethodDecl) {
                     // import package
                     addImportInfo(element, "com.zero.hycache.manager", "HyCacheManager");
-//                    addHyCacheVar(element, "hyCacheVar$$" + id, hyCache);
                     // 修改body 体内容
                     java.util.List<JCTree.JCStatement> jcStatements = new ArrayList<>();
-//                    JCTree.JCVariableDecl var = makeVarDef(treeMaker.Modifiers(0),"cache", memberAccess("java.lang.Object"), treeMaker.ex(Type.ClassType));
                     // 需要声明类型
                     //Object cache = HyCacheManager.getCache(key,ex);
                     String cacheKey = StringUtils.isNotBlank(hyCache.key()) ? hyCache.key() : UuidUtils.get32Id();
@@ -113,7 +120,7 @@ public class HyCacheProcessor extends AbstractProcessor {
                                     treeMaker.Apply(
                                             List.nil(),
                                             treeMaker.Select(
-                                                    treeMaker.Ident(names.fromString("this")), // . 左边的内容
+                                                    finalIS_STATIC_METHOD ? treeMaker.Ident(names.fromString(simpleClassName)) : treeMaker.Ident(names.fromString("this")), // . 左边的内容
                                                     names.fromString(realMethodName) // . 右边的内容
                                             ),
                                             com.sun.tools.javac.util.List.from(params) // 方法中的内容，多个参数
@@ -194,10 +201,13 @@ public class HyCacheProcessor extends AbstractProcessor {
         return expr;
     }
 
-    private JCTree.JCMethodDecl generateRealMethod(JCTree.JCMethodDecl jcMethodDecl, HyCache hyCache) {
+    private JCTree.JCMethodDecl generateRealMethod(JCTree.JCMethodDecl jcMethodDecl, boolean IS_STATIC_METHOD) {
 
-        //修改方法级别
         JCTree.JCModifiers jcModifiers = treeMaker.Modifiers(Flags.PRIVATE);
+        // support static method
+        if (IS_STATIC_METHOD) {
+            jcModifiers=treeMaker.Modifiers(Flags.STATIC);
+        }
         JCTree.JCBlock body = jcMethodDecl.body;
         List<JCTree.JCStatement> statements = body.getStatements();
         JCTree.JCBlock bodyBlock = treeMaker.Block(0, statements);
